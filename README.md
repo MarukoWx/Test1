@@ -11,13 +11,13 @@ local function QuestCheck()
 	local Lvl = game:GetService("Players").LocalPlayer.Data.Level.Value
 	if Lvl >= 1 and Lvl <= 9 then
 		if tostring(game.Players.LocalPlayer.Team) == "Marines" then
-			MobName = "Trainee [Lv. 5]"
+			MobName = "Trainee"
 			QuestName = "MarineQuest"
 			QuestLevel = 1
 			Mon = "Trainee"
 			NPCPosition = CFrame.new(-2709.67944, 24.5206585, 2104.24585, -0.744724929, -3.97967455e-08, -0.667371571, 4.32403588e-08, 1, -1.07884304e-07, 0.667371571, -1.09201515e-07, -0.744724929)
 		elseif tostring(game.Players.LocalPlayer.Team) == "Pirates" then
-			MobName = "Bandit [Lv. 5]"
+			MobName = "Bandit"
 			Mon = "Bandit"
 			QuestName = "BanditQuest1"
 			QuestLevel = 1
@@ -35,7 +35,7 @@ local function QuestCheck()
 	end
 
 	if Lvl >= 375 and Lvl <= 399 then -- Fishman Warrior
-		MobName = "Fishman Warrior [Lv. 375]"
+		MobName = "Fishman Warrior"
 		QuestName = "FishmanQuest"
 		QuestLevel = 1
 		Mon = "Fishman Warrior"
@@ -56,7 +56,7 @@ local function QuestCheck()
 	end
 
 	if Lvl >= 15 and Lvl <= 29 then
-		MobName = "Gorilla [Lv. 20]"
+		MobName = "Gorilla"
 		QuestName = "JungleQuest"
 		QuestLevel = 2
 		Mon = "Gorilla"
@@ -74,7 +74,7 @@ local function QuestCheck()
 	end
 
 	if Lvl >= 400 and Lvl <= 449 then -- Fishman Commando
-		MobName = "Fishman Commando [Lv. 400]"
+		MobName = "Fishman Commando"
 		QuestName = "FishmanQuest"
 		QuestLevel = 2
 		Mon = "Fishman Commando"
@@ -130,13 +130,13 @@ local function QuestCheck()
 	if QuestName == "MarineQuest2" then
 		QuestName = "MarineQuest2"
 		QuestLevel = 1
-		MobName = "Chief Petty Officer [Lv. 120]"
+		MobName = "Chief Petty Officer"
 		Mon = "Chief Petty Officer"
 		LevelRequire = 120
 	elseif QuestName == "ImpelQuest" then
 		QuestName = "PrisonerQuest"
 		QuestLevel = 2
-		MobName = "Dangerous Prisoner [Lv. 190]"
+		MobName = "Dangerous Prisoner"
 		Mon = "Dangerous Prisoner"
 		LevelRequire = 210
 		NPCPosition = CFrame.new(5310.60547, 0.350014925, 474.946594, 0.0175017118, 0, 0.999846935, 0, 1, 0, -0.999846935, 0, 0.0175017118)
@@ -149,7 +149,7 @@ local function QuestCheck()
 	elseif QuestName == "Area2Quest" and QuestLevel == 2 then
 		QuestName = "Area2Quest"
 		QuestLevel = 1
-		MobName = "Swan Pirate [Lv. 775]"
+		MobName = "Swan Pirate"
 		Mon = "Swan Pirate"
 		LevelRequire = 775
 	end
@@ -255,6 +255,18 @@ spawn(function()
 		end)
 	end
 end)
+
+function BTP(P)
+    _G.FastAttack = false
+	repeat wait(1)
+		game.Players.LocalPlayer.Character.Humanoid:ChangeState(15)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = P
+		task.wait()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = P
+	until (P.Position-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1500
+    _G.FastAttack = true
+end
+
 
 MethodFarm = CFrame.new(0, 30, 0)
 
@@ -423,7 +435,7 @@ end
 
 
 
-Tab:CreateSection("Setting",true)
+Setting:CreateSection("Setting",true)
 
 
 local SelectWeapon = "Melee";
@@ -473,7 +485,7 @@ task.spawn(function()
     end
 end)
 
-local SingleSelection = Tab:CreateDropdown({
+local SingleSelection = Setting:CreateDropdown({
     Name = "Select Weapon",
     Options = Weapon,
     CurrentOption = "Melee",
@@ -484,7 +496,7 @@ local SingleSelection = Tab:CreateDropdown({
     end,
 })
 
-local Toggle = Tab:CreateToggle({
+local Toggle = Setting:CreateToggle({
     Name = "Fast Attack",
     Info = {
         Title = 'Fast Attack',
@@ -745,11 +757,7 @@ task.spawn(function()
 							Controller.hitboxMagnitude = 65
 							pcall(task.spawn, Controller.attack, Controller)
 							lastFireValid = tick()
-							for i = 1, 10 do
-								if i % 2 == 0 then
-									break
-								end
-							end
+                            return true
 						end
 
 						local AID3 = Controller.anims.basic[3]
@@ -757,7 +765,7 @@ task.spawn(function()
 						local ID = AID3 or AID2
 						Animation.AnimationId = ID
 						local Playing = Controller.humanoid:LoadAnimation(Animation)
-						Playing:Play(0.02, 0.02, 0.02)
+						Playing:Play(0.01, 0.01, 0.01)
 						RigEvent:FireServer("hit", canHits, AID3 and 3 or 2, "")
 						-- AttackSignal:Fire()
 						delay(0.5, function()
@@ -770,7 +778,7 @@ task.spawn(function()
 	end)
 end)
 
-local Toggle = Tab:CreateToggle({
+local Toggle = Setting:CreateToggle({
     Name = "Bring Mob",
     Info = {
         Title = 'Bring Mob',
@@ -922,6 +930,82 @@ spawn(function()
 	end
 end)
 
+
+local Toggle = Setting:CreateToggle({
+    Name = "White Screen",
+    Info = {
+        Title = 'White Screen',
+        Image = '12735851647',
+        Description = 'จอขาวลด Cpu',
+    },
+    CurrentValue = false,
+    Flag = "WhiteScreen", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        if Value == true then
+            game:GetService("RunService"):Set3dRenderingEnabled(false)
+        elseif Value == false then
+            game:GetService("RunService"):Set3dRenderingEnabled(true)
+        end
+    end,
+})
+
+Setting:CreateSection("Skill ",true)
+
+local Toggle = Setting:CreateToggle({
+    Name = "Skill Z",
+    Info = {
+        Title = 'Skill Z',
+        Image = '12735851647',
+        Description = 'ใช้สำหรับ ฟาร์มผล & ฟาร์มปืน',
+    },
+    CurrentValue = false,
+    Flag = "Skill_Z", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        _G.Skill_Z = Value
+    end,
+})
+
+local Toggle = Setting:CreateToggle({
+    Name = "Skill X",
+    Info = {
+        Title = 'Skill X',
+        Image = '12735851647',
+        Description = 'ใช้สำหรับ ฟาร์มผล & ฟาร์มปืน',
+    },
+    CurrentValue = false,
+    Flag = "Skill_X", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        _G.Skill_Z = Value
+    end,
+})
+
+local Toggle = Setting:CreateToggle({
+    Name = "Skill C",
+    Info = {
+        Title = 'Skill C',
+        Image = '12735851647',
+        Description = 'ใช้สำหรับ ฟาร์มผล ',
+    },
+    CurrentValue = false,
+    Flag = "Skill_C", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        _G.Skill_C = Value
+    end,
+})
+  
+local Toggle = Setting:CreateToggle({
+    Name = "Skill V",
+    Info = {
+        Title = 'Skill V',
+        Image = '12735851647',
+        Description = 'ใช้สำหรับ ฟาร์มผล ',
+    },
+    CurrentValue = false,
+    Flag = "Skill_V", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        _G.Skill_V = Value
+    end,
+})
 
 Tab:CreateSection("Mastery",true)
 
